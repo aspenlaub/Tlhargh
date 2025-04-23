@@ -5,6 +5,7 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -47,7 +48,7 @@ public class ArborFoldersTest {
         var client = new HttpClient();
         Dictionary<string, ArborFolder> expectedArborFolders = (await client.GetFromJsonAsync<List<ArborFolder>>(settings.GetArborFoldersUrl))?
                .ToDictionary(x => x.ArborSourcePathVar, x => x)
-               ?? new Dictionary<string, ArborFolder>();
+               ?? [];
         ArborFolders arborFolders = await _Container!.Resolve<IArborFoldersSource>().GetResolvedArborFoldersAsync(errorsAndInfos);
         var actualArborFolders = arborFolders
              .ToDictionary(x => x.ArborSourcePathVar, x => x);
