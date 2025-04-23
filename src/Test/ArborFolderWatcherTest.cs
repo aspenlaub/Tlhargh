@@ -40,6 +40,7 @@ public class ArborFolderWatcherTest {
     [TestMethod]
     public async Task NewFile_OneChangedFolder() {
         await File.WriteAllTextAsync(_Folder.FullName + @"\new_file.txt", "I am a new file");
+        await Task.Delay(TimeSpan.FromSeconds(1));
         IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.ChangedFolders;
         Assert.AreEqual(1, changedFolders.Count);
         Assert.AreEqual(_Folder.FullName, changedFolders[0].Folder.FullName);
