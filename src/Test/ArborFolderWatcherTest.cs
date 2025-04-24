@@ -11,6 +11,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Test;
 [TestClass]
 public class ArborFolderWatcherTest {
     private readonly IFolder _Folder = new Folder(Path.GetTempPath()).SubFolder(nameof(ArborFolderWatcherTest));
+    private readonly IFolder _WorkingFolder = new Folder(Path.GetTempPath()).SubFolder(nameof(ArborFolderWatcherTest) + "_Work");
     private IFolder SubFolder => _Folder.SubFolder("Sub");
     private IFolder SubFolderTwo => _Folder.SubFolder("SubTwo");
     private string NameOfExistingFile => SubFolder.FullName + @"\i_do_exist.txt";
@@ -20,17 +21,15 @@ public class ArborFolderWatcherTest {
 
     [TestInitialize]
     public void Initialize() {
-        _Folder.CreateIfNecessary();
-        SubFolder.CreateIfNecessary();
-        SubFolderTwo.CreateIfNecessary();
-        foreach(IFolder folder in new List<IFolder> {  _Folder, SubFolder, SubFolderTwo }) {
+        foreach(IFolder folder in new List<IFolder> {  _Folder, SubFolder, SubFolderTwo, _WorkingFolder }) {
+            folder.CreateIfNecessary();
             foreach (string file in Directory.GetFiles(folder.FullName, "*")) {
                 File.Delete(file);
             }
         }
         File.WriteAllText(NameOfExistingFile, NameOfExistingFile);
 
-        _ChangedArborFoldersRepository = new ChangedArborFoldersRepository();
+        _ChangedArborFoldersRepository = new ChangedArborFoldersRepository(_WorkingFolder);
         var arborFolder = new ArborFolder { FullFolder = _Folder.FullName + '\\' };
         _Watcher = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, arborFolder).Create();
     }
@@ -42,38 +41,48 @@ public class ArborFolderWatcherTest {
 
     [TestMethod]
     public void NoFileChanges_NoChangedFolders() {
-        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.ChangedFolders;
+        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.FoldersWithChanges();
         Assert.AreEqual(0, changedFolders.Count);
     }
 
     [TestMethod]
     public async Task NewFile_OneChangedFolder() {
-        Assert.AreEqual(0, _ChangedArborFoldersRepository!.ChangedFolders.Count);
+        Assert.AreEqual(0, _ChangedArborFoldersRepository!.FoldersWithChanges().Count);
         await File.WriteAllTextAsync(_Folder.FullName + @"\new_file.txt", "I am a new file");
         await Task.Delay(_Delay);
-        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.ChangedFolders;
+        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.FoldersWithChanges();
         Assert.AreEqual(1, changedFolders.Count);
         Assert.AreEqual(_Folder.FullName, changedFolders[0].Folder.FullName);
     }
 
     [TestMethod]
     public async Task DeletedFile_OneChangedFolder() {
-        Assert.AreEqual(0, _ChangedArborFoldersRepository!.ChangedFolders.Count);
+        Assert.AreEqual(0, _ChangedArborFoldersRepository!.FoldersWithChanges().Count);
         File.Delete(NameOfExistingFile);
         await Task.Delay(_Delay);
-        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.ChangedFolders;
+        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.FoldersWithChanges();
         Assert.AreEqual(1, changedFolders.Count);
         Assert.AreEqual(SubFolder.FullName, changedFolders[0].Folder.FullName);
     }
 
     [TestMethod]
-    public async Task MoveFileToAnotherFolder_ThreeChangedFolders() {
-        Assert.AreEqual(0, _ChangedArborFoldersRepository!.ChangedFolders.Count);
+    public async Task MoveFileToAnotherFolder_TwoChangedFolders() {
+        Assert.AreEqual(0, _ChangedArborFoldersRepository!.FoldersWithChanges().Count);
         File.Move(NameOfExistingFile, NameOfExistingFile.Replace(SubFolder.FullName, SubFolderTwo.FullName));
         await Task.Delay(_Delay);
-        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.ChangedFolders;
+        IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.FoldersWithChanges();
         Assert.AreEqual(2, changedFolders.Count);
         Assert.IsTrue(changedFolders.Any(f => f.Folder.FullName == SubFolder.FullName));
         Assert.IsTrue(changedFolders.Any(f => f.Folder.FullName == SubFolderTwo.FullName));
+    }
+
+    [TestMethod]
+    public async Task ChangedFoldersSurviveRepositoryRecreation() {
+        Assert.AreEqual(0, _ChangedArborFoldersRepository!.FoldersWithChanges().Count);
+        File.Move(NameOfExistingFile, NameOfExistingFile.Replace(SubFolder.FullName, SubFolderTwo.FullName));
+        await Task.Delay(_Delay);
+        Assert.AreEqual(2, _ChangedArborFoldersRepository!.FoldersWithChanges().Count);
+        var changedArborFoldersRepository = new ChangedArborFoldersRepository(_WorkingFolder);
+        Assert.AreEqual(2, changedArborFoldersRepository.FoldersWithChanges().Count);
     }
 }
