@@ -24,7 +24,10 @@ public class ArborFolderWatcherFactory(IChangedArborFoldersRepository changedArb
     }
 
     private static Folder FolderFromFullPath(string fullPath) {
-        return new Folder(fullPath[..fullPath.LastIndexOf('\\')]);
+        int pos = fullPath.LastIndexOf('\\');
+        return new Folder(fullPath.Substring(pos + 1).Contains('.')
+            ? fullPath[..pos]
+            : fullPath);
     }
 
     private void OnChanged(object sender, FileSystemEventArgs e) {
