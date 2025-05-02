@@ -20,6 +20,7 @@
     <Version>2.0.$(VersionDays).$(VersionMinutes)</Version>
     <AssemblyName>Aspenlaub.Net.GitHub.CSharp.Tlhargh</AssemblyName>
     <RootNamespace>Aspenlaub.Net.GitHub.CSharp.Tlhargh</RootNamespace>
+    <ApplicationIcon>tlhargh.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
