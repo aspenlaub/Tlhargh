@@ -1,5 +1,4 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Dvin.Components;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+﻿using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 using Autofac;
 
@@ -7,17 +6,10 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 
 public static class TlharghContainerBuilder {
     // ReSharper disable once UnusedMember.Global
-    public static ContainerBuilder RegisterForTlharghDvinAndPegh(this ContainerBuilder builder, string applicationName, ICsArgumentPrompter csArgumentPrompter) {
-        builder.UseDvinAndPegh(applicationName, csArgumentPrompter);
+    public static ContainerBuilder UseTlharghDvinAndPegh(this ContainerBuilder builder) {
+        builder.UsePegh(Constants.TlharghAppId, new DummyCsArgumentPrompter());
         builder.RegisterType<ArborFoldersSource>().As<IArborFoldersSource>().SingleInstance();
         builder.RegisterType<ChangedArborFoldersRepository>().As<IChangedArborFoldersRepository>().SingleInstance();
         return builder;
-    }
-
-    public static IServiceCollection UseTlharghDvinAndPegh(this IServiceCollection services, string applicationName, ICsArgumentPrompter csArgumentPrompter) {
-        services.UseDvinAndPegh(applicationName, csArgumentPrompter);
-        services.AddTransient<IArborFoldersSource, ArborFoldersSource>();
-        services.AddTransient<IChangedArborFoldersRepository, ChangedArborFoldersRepository>();
-        return services;
     }
 }

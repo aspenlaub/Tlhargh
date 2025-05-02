@@ -1,0 +1,25 @@
+﻿<Window x:Class="Aspenlaub.Net.GitHub.CSharp.Tlhargh.TlharghWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Loaded="OnTlharghWindowLoaded" Icon="tlhargh.ico"
+        Title="Tlhargh Host" Height="450" Width="800" Background="DarkGoldenrod">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Margin="10,5,0,0">Tlhargh ⮀</Label>
+        <TextBox Grid.Column="1" Grid.Row="0" Padding="2,3,2,3" Margin="10,5,0,0" Name="UiThreadLastActiveAt" IsReadOnly="True" Width="70" Background="Goldenrod" />
+        <TextBox Name="MonitorBox" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4" Margin="10" Padding="5" Background="Black" Foreground="Goldenrod" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+        <Button Grid.Column="3" Grid.Row="0" Name="CloseButton" Margin="0,10,10,0" Padding="10,0,10,0" Background="Black" Foreground="Goldenrod" Click="OnCloseButtonClickAsync">_Close</Button>
+    </Grid>
+</Window>

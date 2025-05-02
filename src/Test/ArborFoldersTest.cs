@@ -18,7 +18,7 @@ public class ArborFoldersTest {
     [TestInitialize]
     public void Initialize() {
         _PeghContainer = new ContainerBuilder().UsePegh(nameof(ArborFoldersTest), new DummyCsArgumentPrompter()).Build();
-        _Container = new ContainerBuilder().RegisterForTlharghDvinAndPegh(nameof(ArborFoldersTest), new DummyCsArgumentPrompter()).Build();
+        _Container = new ContainerBuilder().UseTlharghDvinAndPegh().Build();
     }
 
     [TestMethod]

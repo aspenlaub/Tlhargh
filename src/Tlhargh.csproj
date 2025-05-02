@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
     <GenerateBuildInfoConfigFile>false</GenerateBuildInfoConfigFile>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <Deterministic>false</Deterministic>
@@ -16,25 +18,52 @@
     <VersionDays>$([System.DateTime]::UtcNow.Subtract($([System.DateTime]::Parse("2019-07-24"))).Days.ToString())</VersionDays>
     <VersionMinutes>$([System.Math]::Floor($([System.DateTime]::UtcNow.Subtract($([System.DateTime]::UtcNow.Date)).TotalMinutes)).ToString())</VersionMinutes>
     <Version>2.0.$(VersionDays).$(VersionMinutes)</Version>
-    <RootNamespace>Aspenlaub.Net.GitHub.CSharp.Tlhargh</RootNamespace>
     <AssemblyName>Aspenlaub.Net.GitHub.CSharp.Tlhargh</AssemblyName>
+    <RootNamespace>Aspenlaub.Net.GitHub.CSharp.Tlhargh</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <NuspecFile>Tlhargh.nuspec</NuspecFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Properties\PublishProfiles\**" />
     <Compile Remove="Test\**" />
-    <Content Remove="Test\**" />
+    <EmbeddedResource Remove="Properties\PublishProfiles\**" />
     <EmbeddedResource Remove="Test\**" />
+    <None Remove="Properties\PublishProfiles\**" />
     <None Remove="Test\**" />
+    <Page Remove="Properties\PublishProfiles\**" />
+    <Page Remove="Test\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dvin" Version="2.0.2095.920" />
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+    <None Remove="tlhargh.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Content Include="tlhargh.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Pegh" Version="2.0.2095.912" />
   </ItemGroup>
 </Project>
