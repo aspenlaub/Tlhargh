@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Loaded="OnTlharghWindowLoaded" Icon="tlhargh.ico"
-        Title="Tlhargh Host" Height="450" Width="800" Background="DarkGoldenrod">
+        Loaded="OnTlharghWindowLoadedAsync" Icon="tlhargh.ico"
+        Title="Tlhargh" Height="450" Width="800" Background="DarkGoldenrod">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

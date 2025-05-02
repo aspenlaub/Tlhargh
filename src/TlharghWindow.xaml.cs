@@ -1,5 +1,11 @@
-﻿using System.Windows.Threading;
+﻿using System.IO;
+using System.Windows.Threading;
 using System.Windows;
+using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
+using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
+using Autofac;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh;
 
@@ -8,14 +14,26 @@ public partial class TlharghWindow : IDisposable {
     private DispatcherTimer? _DispatcherTimer;
     private SynchronizationContext? UiSynchronizationContext { get; }
     private DateTime _UiThreadLastActiveAt;
+    private readonly IContainer _Container;
+    private IChangedArborFoldersRepository? _ChangedArborFoldersRepository;
+    private readonly List<FileSystemWatcher> _FileSystemWatchers = [];
 
     public TlharghWindow() {
         InitializeComponent();
         UiSynchronizationContext = SynchronizationContext.Current;
         UpdateUiThreadLastActiveAt();
+        _Container = new ContainerBuilder().UseTlharghDvinAndPegh().Build();
     }
 
     public void Dispose() {
+        foreach (var watcher in _FileSystemWatchers) {
+            watcher.Dispose();
+        }
+
+        if (_ChangedArborFoldersRepository != null) {
+            _ChangedArborFoldersRepository.OnChangedFolderAdded -= OnChangedFolderAdded;
+        }
+
         _DispatcherTimer?.Stop();
     }
 
@@ -23,7 +41,31 @@ public partial class TlharghWindow : IDisposable {
         Environment.Exit(0);
     }
 
-    private void OnTlharghWindowLoaded(object sender, RoutedEventArgs e) {
+    // ReSharper disable once AsyncVoidMethod
+    private async void OnTlharghWindowLoadedAsync(object sender, RoutedEventArgs e) {
+        var source = _Container.Resolve<IArborFoldersSource>();
+        var errorsAndInfos = new ErrorsAndInfos();
+        var arborFolders = await source.GetResolvedArborFoldersAsync(errorsAndInfos);
+        if (errorsAndInfos.AnyErrors()) {
+            MessageBox.Show(string.Join("\r\n", errorsAndInfos.Errors), Properties.Resources.CouldNotRetrieveArborFolders, MessageBoxButton.OK, MessageBoxImage.Error);
+            Close();
+        }
+
+        var resolver = _Container.Resolve<IFolderResolver>();
+        IFolder? workingFolder = await resolver.ResolveAsync(@"$(GitHub)\TlharghBin\Work", errorsAndInfos);
+        if (errorsAndInfos.AnyErrors()) {
+            MessageBox.Show(string.Join("\r\n", errorsAndInfos.Errors), Properties.Resources.CouldNotDetermineWorkingFolder, MessageBoxButton.OK, MessageBoxImage.Error);
+            Close();
+        }
+
+        _ChangedArborFoldersRepository = _Container.Resolve<IChangedArborFoldersRepository>();
+        _ChangedArborFoldersRepository.SetWorkingFolder(workingFolder);
+        _ChangedArborFoldersRepository.OnChangedFolderAdded += OnChangedFolderAdded;
+
+        foreach (var arborFolder in arborFolders) {
+            var factory = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, arborFolder);
+            _FileSystemWatchers.Add(factory.Create());
+        }
         CreateAndStartTimer();
     }
 
@@ -41,5 +83,13 @@ public partial class TlharghWindow : IDisposable {
     private void UpdateUiThreadLastActiveAt() {
         _UiThreadLastActiveAt = DateTime.Now;
         UiThreadLastActiveAt.Text = _UiThreadLastActiveAt.ToLongTimeString();
+    }
+
+    private void OnChangedFolderAdded(object? sender, string changedFolder) {
+        UiSynchronizationContext!.Send(_ => UpdateMonitorWithChangedFolder(changedFolder), null);
+    }
+
+    private void UpdateMonitorWithChangedFolder(string changedFolder) {
+        MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n") + changedFolder;
     }
 }

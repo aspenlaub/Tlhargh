@@ -10,6 +10,7 @@ public static class TlharghContainerBuilder {
         builder.UsePegh(Constants.TlharghAppId, new DummyCsArgumentPrompter());
         builder.RegisterType<ArborFoldersSource>().As<IArborFoldersSource>().SingleInstance();
         builder.RegisterType<ChangedArborFoldersRepository>().As<IChangedArborFoldersRepository>().SingleInstance();
+
         return builder;
     }
 }

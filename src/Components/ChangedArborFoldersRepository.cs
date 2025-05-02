@@ -8,8 +8,14 @@ using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 
-public class ChangedArborFoldersRepository(IFolder workingFolder) : IChangedArborFoldersRepository {
+public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
     private IList<ChangedFolder> ChangedFolders { get; } = [];
+
+    private IFolder _WorkingFolder = (new Folder(Path.GetTempPath())).SubFolder("Default" + nameof(ChangedArborFoldersRepository));
+
+    public void SetWorkingFolder(IFolder workingFolder) {
+        _WorkingFolder = workingFolder;
+    }
 
     public void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
         if (ChangedFolders.Any(f => f.Folder.FullName == folder.FullName)) { return; }
@@ -17,6 +23,8 @@ public class ChangedArborFoldersRepository(IFolder workingFolder) : IChangedArbo
         var changedFolder = new ChangedFolder { ArborFolder = arborFolder, Folder = folder };
         ChangedFolders.Add(changedFolder);
         PersistToFile(changedFolder);
+        ChangedFolderAdded(changedFolder.ArborFolder.ArborDestPathVar
+            + changedFolder.Folder.FullName.Substring(arborFolder.FullFolder.Length).Replace("\\", "/"));
     }
 
     public IList<ChangedFolder> FoldersWithChanges() {
@@ -33,7 +41,7 @@ public class ChangedArborFoldersRepository(IFolder workingFolder) : IChangedArbo
     }
 
     private bool TryPersistToFile(ChangedFolder changedFolder) {
-        workingFolder.CreateIfNecessary();
+        _WorkingFolder.CreateIfNecessary();
         string fileName = FileName();
         List<ChangedFolder> changedFolders = ReadFile();
         if (changedFolders.Any(f => f.EqualTo(changedFolder))) { return true; }
@@ -56,13 +64,19 @@ public class ChangedArborFoldersRepository(IFolder workingFolder) : IChangedArbo
     }
 
     private string FileName() {
-        workingFolder.CreateIfNecessary();
-        return workingFolder.FullName + $"\\{nameof(ChangedArborFoldersRepository)}.json";
+        _WorkingFolder.CreateIfNecessary();
+        return _WorkingFolder.FullName + $"\\{nameof(ChangedArborFoldersRepository)}.json";
     }
 
     private List<ChangedFolder> ReadFile() {
         return File.Exists(FileName())
             ? JsonSerializer.Deserialize<List<ChangedFolder>>(File.ReadAllText(FileName())) ?? []
             : [];
+    }
+
+    public event EventHandler<string>? OnChangedFolderAdded;
+
+    protected virtual void ChangedFolderAdded(string changedFolder) {
+        OnChangedFolderAdded?.Invoke(this, changedFolder);
     }
 }

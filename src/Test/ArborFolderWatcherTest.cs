@@ -29,7 +29,8 @@ public class ArborFolderWatcherTest {
         }
         File.WriteAllText(NameOfExistingFile, NameOfExistingFile);
 
-        _ChangedArborFoldersRepository = new ChangedArborFoldersRepository(_WorkingFolder);
+        _ChangedArborFoldersRepository = new ChangedArborFoldersRepository();
+        _ChangedArborFoldersRepository.SetWorkingFolder(_WorkingFolder);
         var arborFolder = new ArborFolder { FullFolder = _Folder.FullName + '\\' };
         _Watcher = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, arborFolder).Create();
     }
@@ -82,7 +83,8 @@ public class ArborFolderWatcherTest {
         File.Move(NameOfExistingFile, NameOfExistingFile.Replace(SubFolder.FullName, SubFolderTwo.FullName));
         await Task.Delay(_Delay);
         Assert.AreEqual(2, _ChangedArborFoldersRepository!.FoldersWithChanges().Count);
-        var changedArborFoldersRepository = new ChangedArborFoldersRepository(_WorkingFolder);
+        var changedArborFoldersRepository = new ChangedArborFoldersRepository();
+        changedArborFoldersRepository.SetWorkingFolder(_WorkingFolder);
         Assert.AreEqual(2, changedArborFoldersRepository.FoldersWithChanges().Count);
     }
 }
