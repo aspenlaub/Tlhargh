@@ -40,6 +40,6 @@ public partial class TlharghWindow : IDisposable {
 
     private void UpdateUiThreadLastActiveAt() {
         _UiThreadLastActiveAt = DateTime.Now;
-        UiThreadLastActiveAt.Text = _UiThreadLastActiveAt.ToShortTimeString();
+        UiThreadLastActiveAt.Text = _UiThreadLastActiveAt.ToLongTimeString();
     }
 }
