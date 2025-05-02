@@ -24,7 +24,7 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
         ChangedFolders.Add(changedFolder);
         PersistToFile(changedFolder);
         ChangedFolderAdded(changedFolder.ArborFolder.ArborDestPathVar
-            + changedFolder.Folder.FullName.Substring(arborFolder.FullFolder.Length).Replace("\\", "/"));
+            + changedFolder.Folder.FullName.Replace(arborFolder.FullFolder, "").Replace("\\", "/"));
     }
 
     public IList<ChangedFolder> FoldersWithChanges() {
