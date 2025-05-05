@@ -10,5 +10,5 @@ public interface IChangedArborFoldersRepository {
     void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder);
     IList<ChangedFolder> FoldersWithChanges();
 
-    event EventHandler<string>? OnChangedFolderAdded;
+    event EventHandler<ChangedFolder>? OnChangedFolderAdded;
 }

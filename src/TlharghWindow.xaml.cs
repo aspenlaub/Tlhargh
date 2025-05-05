@@ -6,6 +6,7 @@ using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 using Autofac;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh;
 
@@ -26,7 +27,7 @@ public partial class TlharghWindow : IDisposable {
     }
 
     public void Dispose() {
-        foreach (var watcher in _FileSystemWatchers) {
+        foreach (FileSystemWatcher watcher in _FileSystemWatchers) {
             watcher.Dispose();
         }
 
@@ -43,15 +44,15 @@ public partial class TlharghWindow : IDisposable {
 
     // ReSharper disable once AsyncVoidMethod
     private async void OnTlharghWindowLoadedAsync(object sender, RoutedEventArgs e) {
-        var source = _Container.Resolve<IArborFoldersSource>();
+        IArborFoldersSource source = _Container.Resolve<IArborFoldersSource>();
         var errorsAndInfos = new ErrorsAndInfos();
-        var arborFolders = await source.GetResolvedArborFoldersAsync(errorsAndInfos);
+        ArborFolders arborFolders = await source.GetResolvedArborFoldersAsync(errorsAndInfos);
         if (errorsAndInfos.AnyErrors()) {
             MessageBox.Show(string.Join("\r\n", errorsAndInfos.Errors), Properties.Resources.CouldNotRetrieveArborFolders, MessageBoxButton.OK, MessageBoxImage.Error);
             Close();
         }
 
-        var resolver = _Container.Resolve<IFolderResolver>();
+        IFolderResolver resolver = _Container.Resolve<IFolderResolver>();
         IFolder? workingFolder = await resolver.ResolveAsync(@"$(GitHub)\TlharghBin\Work", errorsAndInfos);
         if (errorsAndInfos.AnyErrors()) {
             MessageBox.Show(string.Join("\r\n", errorsAndInfos.Errors), Properties.Resources.CouldNotDetermineWorkingFolder, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -62,7 +63,7 @@ public partial class TlharghWindow : IDisposable {
         _ChangedArborFoldersRepository.SetWorkingFolder(workingFolder);
         _ChangedArborFoldersRepository.OnChangedFolderAdded += OnChangedFolderAdded;
 
-        foreach (var arborFolder in arborFolders) {
+        foreach (ArborFolder arborFolder in arborFolders) {
             var factory = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, arborFolder);
             _FileSystemWatchers.Add(factory.Create());
         }
@@ -85,11 +86,11 @@ public partial class TlharghWindow : IDisposable {
         UiThreadLastActiveAt.Text = _UiThreadLastActiveAt.ToLongTimeString();
     }
 
-    private void OnChangedFolderAdded(object? sender, string changedFolder) {
+    private void OnChangedFolderAdded(object? sender, ChangedFolder changedFolder) {
         UiSynchronizationContext!.Send(_ => UpdateMonitorWithChangedFolder(changedFolder), null);
     }
 
-    private void UpdateMonitorWithChangedFolder(string changedFolder) {
+    private void UpdateMonitorWithChangedFolder(ChangedFolder changedFolder) {
         MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n") + changedFolder;
     }
 }

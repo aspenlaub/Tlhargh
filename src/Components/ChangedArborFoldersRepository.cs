@@ -11,7 +11,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
     private IList<ChangedFolder> ChangedFolders { get; } = [];
 
-    private IFolder _WorkingFolder = (new Folder(Path.GetTempPath())).SubFolder("Default" + nameof(ChangedArborFoldersRepository));
+    private IFolder _WorkingFolder = new Folder(Path.GetTempPath()).SubFolder("Default" + nameof(ChangedArborFoldersRepository));
 
     public void SetWorkingFolder(IFolder workingFolder) {
         _WorkingFolder = workingFolder;
@@ -23,8 +23,7 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
         var changedFolder = new ChangedFolder { ArborFolder = arborFolder, Folder = folder };
         ChangedFolders.Add(changedFolder);
         PersistToFile(changedFolder);
-        ChangedFolderAdded(changedFolder.ArborFolder.ArborDestPathVar
-            + changedFolder.Folder.FullName.Replace(arborFolder.FullFolder, "").Replace("\\", "/"));
+        ChangedFolderAdded(changedFolder);
     }
 
     public IList<ChangedFolder> FoldersWithChanges() {
@@ -74,9 +73,9 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
             : [];
     }
 
-    public event EventHandler<string>? OnChangedFolderAdded;
+    public event EventHandler<ChangedFolder>? OnChangedFolderAdded;
 
-    protected virtual void ChangedFolderAdded(string changedFolder) {
+    protected virtual void ChangedFolderAdded(ChangedFolder changedFolder) {
         OnChangedFolderAdded?.Invoke(this, changedFolder);
     }
 }
