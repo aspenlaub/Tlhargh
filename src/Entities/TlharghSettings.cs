@@ -7,9 +7,13 @@ public class TlharghSettings : ISecretResult<TlharghSettings> {
     [XmlAttribute("getarborfoldersurl")]
     public string GetArborFoldersUrl { get; set; } = "";
 
+    [XmlAttribute("tlharghbackendurl")]
+    public string TlharghBackendUrl { get; set; } = "";
+
     public TlharghSettings Clone() {
         return new TlharghSettings {
-            GetArborFoldersUrl = GetArborFoldersUrl
+            GetArborFoldersUrl = GetArborFoldersUrl,
+            TlharghBackendUrl = TlharghBackendUrl
         };
     }
 }

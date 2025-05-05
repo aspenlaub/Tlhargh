@@ -27,12 +27,16 @@
     <NuspecFile>Tlhargh.nuspec</NuspecFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Attributes\**" />
     <Compile Remove="Properties\PublishProfiles\**" />
     <Compile Remove="Test\**" />
+    <EmbeddedResource Remove="Attributes\**" />
     <EmbeddedResource Remove="Properties\PublishProfiles\**" />
     <EmbeddedResource Remove="Test\**" />
+    <None Remove="Attributes\**" />
     <None Remove="Properties\PublishProfiles\**" />
     <None Remove="Test\**" />
+    <Page Remove="Attributes\**" />
     <Page Remove="Properties\PublishProfiles\**" />
     <Page Remove="Test\**" />
   </ItemGroup>
@@ -59,9 +63,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Attributes\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Pegh" Version="2.0.2095.912" />
