@@ -8,7 +8,9 @@ public interface IChangedArborFoldersRepository {
     void SetWorkingFolder(IFolder workingFolder);
 
     void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder);
+    void UnregisterChangeInFolder(ArborFolder arborFolder, Folder folder);
     IList<ChangedFolder> FoldersWithChanges();
 
     event EventHandler<ChangedFolder>? OnChangedFolderAdded;
+    event EventHandler<ChangedFolder>? OnChangedFolderRemoved;
 }

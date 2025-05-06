@@ -12,6 +12,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Test;
 public class ArborFolderWatcherTest {
     private readonly IFolder _Folder = new Folder(Path.GetTempPath()).SubFolder(nameof(ArborFolderWatcherTest));
     private readonly IFolder _WorkingFolder = new Folder(Path.GetTempPath()).SubFolder(nameof(ArborFolderWatcherTest) + "_Work");
+    private ArborFolder _ArborFolder = new ArborFolder();
     private IFolder SubFolder => _Folder.SubFolder("Sub");
     private IFolder SubFolderTwo => _Folder.SubFolder("SubTwo");
     private string NameOfExistingFile => SubFolder.FullName + @"\i_do_exist.txt";
@@ -31,8 +32,8 @@ public class ArborFolderWatcherTest {
 
         _ChangedArborFoldersRepository = new ChangedArborFoldersRepository();
         _ChangedArborFoldersRepository.SetWorkingFolder(_WorkingFolder);
-        var arborFolder = new ArborFolder { FullFolder = _Folder.FullName + '\\' };
-        _Watcher = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, arborFolder).Create();
+        _ArborFolder = new ArborFolder { FullFolder = _Folder.FullName + '\\' };
+        _Watcher = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, _ArborFolder).Create();
     }
 
     [TestCleanup]
@@ -74,6 +75,11 @@ public class ArborFolderWatcherTest {
         IList<ChangedFolder> changedFolders = _ChangedArborFoldersRepository!.FoldersWithChanges();
         Assert.AreEqual(2, changedFolders.Count);
         Assert.IsTrue(changedFolders.Any(f => f.Folder.FullName == SubFolder.FullName));
+        Assert.IsTrue(changedFolders.Any(f => f.Folder.FullName == SubFolderTwo.FullName));
+        _ChangedArborFoldersRepository.UnregisterChangeInFolder(_ArborFolder, (Folder)SubFolder);
+        changedFolders = _ChangedArborFoldersRepository!.FoldersWithChanges();
+        Assert.AreEqual(1, changedFolders.Count);
+        Assert.IsFalse(changedFolders.Any(f => f.Folder.FullName == SubFolder.FullName));
         Assert.IsTrue(changedFolders.Any(f => f.Folder.FullName == SubFolderTwo.FullName));
     }
 

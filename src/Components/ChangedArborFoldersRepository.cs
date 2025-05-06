@@ -22,30 +22,45 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
 
         var changedFolder = new ChangedFolder { ArborFolder = arborFolder, Folder = folder };
         ChangedFolders.Add(changedFolder);
-        PersistToFile(changedFolder);
+        PersistToFile(changedFolder, false);
         ChangedFolderAdded(changedFolder);
+    }
+
+    public void UnregisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
+        ChangedFolder? changedFolder = ChangedFolders.FirstOrDefault(f => f.Folder.FullName == folder.FullName);
+        if (changedFolder == null) { return; }
+
+        ChangedFolders.Remove(changedFolder);
+        PersistToFile(changedFolder, true);
+        ChangedFolderRemoved(changedFolder);
     }
 
     public IList<ChangedFolder> FoldersWithChanges() {
         foreach (ChangedFolder changedFolder in ChangedFolders) {
-            PersistToFile(changedFolder);
+            PersistToFile(changedFolder, false);
         }
         return ReadFile();
     }
 
-    private void PersistToFile(ChangedFolder changedFolder) {
-        while (!TryPersistToFile(changedFolder)) {
+    private void PersistToFile(ChangedFolder changedFolder, bool removed) {
+        while (!TryPersistToFile(changedFolder, removed)) {
             Thread.Sleep(TimeSpan.FromMilliseconds(500));
         }
     }
 
-    private bool TryPersistToFile(ChangedFolder changedFolder) {
+    private bool TryPersistToFile(ChangedFolder changedFolder, bool removed) {
         _WorkingFolder.CreateIfNecessary();
         string fileName = FileName();
         List<ChangedFolder> changedFolders = ReadFile();
-        if (changedFolders.Any(f => f.EqualTo(changedFolder))) { return true; }
+        ChangedFolder? changedFolderInFile = changedFolders.FirstOrDefault(f => f.EqualTo(changedFolder));
 
-        changedFolders.Add(changedFolder);
+        if (removed) {
+            if (changedFolderInFile == null) { return true; }
+            changedFolders.Remove(changedFolderInFile);
+        } else {
+            if (changedFolderInFile != null) { return true; }
+            changedFolders.Add(changedFolder);
+        }
         File.WriteAllText(fileName, JsonSerializer.Serialize(changedFolders));
         List<ChangedFolder> changedFoldersCheck = ReadFile();
         if (changedFolders.All(f => changedFoldersCheck.Any(fc => fc.EqualTo(f)))) {
@@ -77,5 +92,11 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
 
     protected virtual void ChangedFolderAdded(ChangedFolder changedFolder) {
         OnChangedFolderAdded?.Invoke(this, changedFolder);
+    }
+
+    public event EventHandler<ChangedFolder>? OnChangedFolderRemoved;
+
+    protected virtual void ChangedFolderRemoved(ChangedFolder changedFolder) {
+        OnChangedFolderRemoved?.Invoke(this, changedFolder);
     }
 }

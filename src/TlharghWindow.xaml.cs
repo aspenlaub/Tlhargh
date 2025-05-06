@@ -33,6 +33,7 @@ public partial class TlharghWindow : IDisposable {
 
         if (_ChangedArborFoldersRepository != null) {
             _ChangedArborFoldersRepository.OnChangedFolderAdded -= OnChangedFolderAdded;
+            _ChangedArborFoldersRepository.OnChangedFolderRemoved -= OnChangedFolderRemoved;
         }
 
         _DispatcherTimer?.Stop();
@@ -62,6 +63,7 @@ public partial class TlharghWindow : IDisposable {
         _ChangedArborFoldersRepository = _Container.Resolve<IChangedArborFoldersRepository>();
         _ChangedArborFoldersRepository.SetWorkingFolder(workingFolder);
         _ChangedArborFoldersRepository.OnChangedFolderAdded += OnChangedFolderAdded;
+        _ChangedArborFoldersRepository.OnChangedFolderRemoved += OnChangedFolderRemoved;
 
         foreach (ArborFolder arborFolder in arborFolders) {
             var factory = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, arborFolder);
@@ -87,10 +89,15 @@ public partial class TlharghWindow : IDisposable {
     }
 
     private void OnChangedFolderAdded(object? sender, ChangedFolder changedFolder) {
-        UiSynchronizationContext!.Send(_ => UpdateMonitorWithChangedFolder(changedFolder), null);
+        UiSynchronizationContext!.Send(_ => UpdateMonitorWithChangedFolder(changedFolder, false), null);
     }
 
-    private void UpdateMonitorWithChangedFolder(ChangedFolder changedFolder) {
-        MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n") + changedFolder;
+    private void OnChangedFolderRemoved(object? sender, ChangedFolder changedFolder) {
+        UiSynchronizationContext!.Send(_ => UpdateMonitorWithChangedFolder(changedFolder, true), null);
+    }
+
+    private void UpdateMonitorWithChangedFolder(ChangedFolder changedFolder, bool removed) {
+        MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n")
+            + (removed ? "✅" : "⭕") + ' ' + changedFolder;
     }
 }
