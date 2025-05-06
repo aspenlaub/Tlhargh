@@ -7,7 +7,7 @@ public class ChangedFolder {
     public ArborFolder ArborFolder { get; init; } = new();
     public Folder Folder { get; init; } = new("");
     [JsonIgnore]
-    public string ArborSubFolder => Folder.FullName.Replace(ArborFolder.FullFolder, "").Replace("\\", "/");
+    public string ArborSubFolder => EncloseWithSlashes(Folder.FullName.Replace(ArborFolder.FullFolder, "").Replace("\\", "/"));
 
     public bool EqualTo(ChangedFolder changedFolder) {
         return Folder.FullName == changedFolder.Folder.FullName
@@ -15,6 +15,11 @@ public class ChangedFolder {
     }
 
     public override string ToString() {
-        return ArborFolder.ArborDestPathVar + ArborSubFolder;
+        return ArborFolder.ArborDestPathVar + ArborSubFolder.Substring(1);
     }
+
+    private static string EncloseWithSlashes(string s) {
+        return (s.StartsWith('/') ? "" : "/") + s + (s.EndsWith('/') ? "" : "/");
+    }
+
 }

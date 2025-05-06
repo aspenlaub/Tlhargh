@@ -21,8 +21,8 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
         ChangedFolderAdded(changedFolder);
     }
 
-    public void UnregisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
-        ChangedFolder? changedFolder = ChangedFolders.FirstOrDefault(f => f.Folder.FullName == folder.FullName);
+    public void UnregisterChangeInFolder(ChangedFolder folderToUnregister) {
+        ChangedFolder? changedFolder = ChangedFolders.FirstOrDefault(f => f.EqualTo(folderToUnregister));
         if (changedFolder == null) { return; }
 
         ChangedFolders.Remove(changedFolder);

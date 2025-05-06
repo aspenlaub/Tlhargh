@@ -1,12 +1,14 @@
 ﻿using System.IO;
 using System.Windows.Threading;
 using System.Windows;
+using Aspenlaub.Net.GitHub.CSharp.Dvin.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 using Autofac;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh;
 
@@ -95,8 +97,10 @@ public partial class TlharghWindow : IDisposable {
 
             ITlharghWorker worker = _Container.Resolve<ITlharghWorkerFactory>().Create();
             await worker.DoWorkAsync(++ _Counter, DateTime.Now.AddSeconds(_workerMaxTimeInSeconds));
-        } catch (Exception ex) {
-            UiSynchronizationContext!.Send(_ => UpdateMonitorWithException(ex), null);
+        } catch (Exception exception) {
+            UiSynchronizationContext!.Send(_ => UpdateMonitorWithException(exception), null);
+            IFolder? exceptionLogFolder = new Folder(Path.GetTempPath()).SubFolder("AspenlaubExceptions");
+            ExceptionSaver.SaveUnhandledException(exceptionLogFolder, exception, Constants.TlharghAppId, _ => { });
         }
     }
 

@@ -26,13 +26,24 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
         ChangedFolderAdded(changedFolder);
     }
 
-    public void UnregisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
-        ChangedFolder? changedFolder = ChangedFolders.FirstOrDefault(f => f.Folder.FullName == folder.FullName);
-        if (changedFolder == null) { return; }
+    public void UnregisterChangeInFolder(ChangedFolder folderToUnregister) {
+        ChangedFolder? changedFolder = ChangedFolders.FirstOrDefault(f => f.EqualTo(folderToUnregister));
+        if (changedFolder != null) {
+            ChangedFolders.Remove(changedFolder);
+            PersistToFile(changedFolder, true);
+            ChangedFolderRemoved(changedFolder);
+        } else {
+            changedFolder = FoldersWithChanges().FirstOrDefault(f => f.EqualTo(folderToUnregister));
+            if (changedFolder != null) {
+                PersistToFile(changedFolder, true);
+                ChangedFolderRemoved(changedFolder);
+            }
+        }
 
-        ChangedFolders.Remove(changedFolder);
-        PersistToFile(changedFolder, true);
-        ChangedFolderRemoved(changedFolder);
+        changedFolder = FoldersWithChanges().FirstOrDefault(f => f.EqualTo(folderToUnregister));
+        if (changedFolder != null) {
+            throw new Exception("Changed folder survived removal");
+        }
     }
 
     public IList<ChangedFolder> FoldersWithChanges() {

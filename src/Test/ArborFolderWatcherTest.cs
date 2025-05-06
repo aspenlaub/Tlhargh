@@ -76,7 +76,7 @@ public class ArborFolderWatcherTest {
         Assert.AreEqual(2, changedFolders.Count);
         Assert.IsTrue(changedFolders.Any(f => f.Folder.FullName == SubFolder.FullName));
         Assert.IsTrue(changedFolders.Any(f => f.Folder.FullName == SubFolderTwo.FullName));
-        _ChangedArborFoldersRepository.UnregisterChangeInFolder(_ArborFolder, (Folder)SubFolder);
+        _ChangedArborFoldersRepository.UnregisterChangeInFolder(new ChangedFolder { ArborFolder = _ArborFolder, Folder = (Folder)SubFolder });
         changedFolders = _ChangedArborFoldersRepository!.FoldersWithChanges();
         Assert.AreEqual(1, changedFolders.Count);
         Assert.IsFalse(changedFolders.Any(f => f.Folder.FullName == SubFolder.FullName));

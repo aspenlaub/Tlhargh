@@ -17,7 +17,7 @@ public class TlharghWorker(IChangedArborFoldersRepository repository, ITlharghAc
             if (errorsAndInfos.AnyErrors()) {
                 counter ++;
             } else {
-                repository.UnregisterChangeInFolder(changedFolder.ArborFolder, changedFolder.Folder);
+                repository.UnregisterChangeInFolder(changedFolder);
             }
         } while (DateTime.Now < stopAt);
     }
