@@ -84,16 +84,20 @@ public partial class TlharghWindow : IDisposable {
 
     private void CreateAndStartTimer() {
         _DispatcherTimer = new DispatcherTimer();
-        _DispatcherTimer.Tick += TlharghWindow_Tick;
+        _DispatcherTimer.Tick += TlharghWindow_TickAsync;
         _DispatcherTimer.Interval = TimeSpan.FromSeconds(_timerIntervalInSeconds);
         _DispatcherTimer.Start();
     }
 
-    private void TlharghWindow_Tick(object? sender, EventArgs e) {
-        UiSynchronizationContext!.Send(_ => UpdateUiThreadLastActiveAt(), null);
+    private async void TlharghWindow_TickAsync(object? sender, EventArgs e) {
+        try {
+            UiSynchronizationContext!.Send(_ => UpdateUiThreadLastActiveAt(), null);
 
-        ITlharghWorker worker = _Container.Resolve<ITlharghWorkerFactory>().Create();
-        worker.DoWork(++ _Counter, DateTime.Now.AddSeconds(_workerMaxTimeInSeconds));
+            ITlharghWorker worker = _Container.Resolve<ITlharghWorkerFactory>().Create();
+            await worker.DoWorkAsync(++ _Counter, DateTime.Now.AddSeconds(_workerMaxTimeInSeconds));
+        } catch (Exception ex) {
+            UiSynchronizationContext!.Send(_ => UpdateMonitorWithException(ex), null);
+        }
     }
 
     private void UpdateUiThreadLastActiveAt() {
@@ -112,5 +116,10 @@ public partial class TlharghWindow : IDisposable {
     private void UpdateMonitorWithChangedFolder(ChangedFolder changedFolder, bool removed) {
         MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n")
             + (removed ? "✅" : "❎") + ' ' + changedFolder;
+    }
+
+    private void UpdateMonitorWithException(Exception exception) {
+        MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n")
+            + "❎ Exception: " + exception.Message;
     }
 }

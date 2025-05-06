@@ -16,7 +16,9 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
     }
 
     public void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
-        ChangedFolders.Add(new ChangedFolder { ArborFolder = arborFolder, Folder = folder });
+        var changedFolder = new ChangedFolder { ArborFolder = arborFolder, Folder = folder };
+        ChangedFolders.Add(changedFolder);
+        ChangedFolderAdded(changedFolder);
     }
 
     public void UnregisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
@@ -24,6 +26,7 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
         if (changedFolder == null) { return; }
 
         ChangedFolders.Remove(changedFolder);
+        ChangedFolderRemoved(changedFolder);
     }
 
     public IList<ChangedFolder> FoldersWithChanges() {
@@ -31,5 +34,14 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
     }
 
     public event EventHandler<ChangedFolder>? OnChangedFolderAdded;
+
+    protected virtual void ChangedFolderAdded(ChangedFolder changedFolder) {
+        OnChangedFolderAdded?.Invoke(this, changedFolder);
+    }
+
     public event EventHandler<ChangedFolder>? OnChangedFolderRemoved;
+
+    protected virtual void ChangedFolderRemoved(ChangedFolder changedFolder) {
+        OnChangedFolderRemoved?.Invoke(this, changedFolder);
+    }
 }

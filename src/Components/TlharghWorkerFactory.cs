@@ -2,8 +2,8 @@
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 
-public class TlharghWorkerFactory(IChangedArborFoldersRepository repository) : ITlharghWorkerFactory {
+public class TlharghWorkerFactory(IChangedArborFoldersRepository repository, ITlharghAccessor accessor) : ITlharghWorkerFactory {
     public ITlharghWorker Create() {
-        return new TlharghWorker(repository);
+        return new TlharghWorker(repository, accessor);
     }
 }
