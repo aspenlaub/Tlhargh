@@ -12,7 +12,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Test;
 public class ArborFolderWatcherTest {
     private readonly IFolder _Folder = new Folder(Path.GetTempPath()).SubFolder(nameof(ArborFolderWatcherTest));
     private readonly IFolder _WorkingFolder = new Folder(Path.GetTempPath()).SubFolder(nameof(ArborFolderWatcherTest) + "_Work");
-    private ArborFolder _ArborFolder = new ArborFolder();
+    private ArborFolder _ArborFolder = new();
     private IFolder SubFolder => _Folder.SubFolder("Sub");
     private IFolder SubFolderTwo => _Folder.SubFolder("SubTwo");
     private string NameOfExistingFile => SubFolder.FullName + @"\i_do_exist.txt";

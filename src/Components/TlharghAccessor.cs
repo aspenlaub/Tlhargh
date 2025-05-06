@@ -30,7 +30,7 @@ public class TlharghAccessor(ITlharghSettingsSource tlharghSettingsSource) : ITl
             return;
         }
 
-        var processorResult = await result.Content.ReadFromJsonAsync<TlharghProcessorResult>();
+        TlharghProcessorResult? processorResult = await result.Content.ReadFromJsonAsync<TlharghProcessorResult>();
         if (processorResult == null) {
             errorsAndInfos.Errors.Add($"Error reading result from {tlharghBackendUrl}");
         } else if (!processorResult.Accepted) {

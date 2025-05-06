@@ -18,6 +18,9 @@ public partial class TlharghWindow : IDisposable {
     private readonly IContainer _Container;
     private IChangedArborFoldersRepository? _ChangedArborFoldersRepository;
     private readonly List<FileSystemWatcher> _FileSystemWatchers = [];
+    private int _Counter;
+
+    private const int _timerIntervalInSeconds = 10, _workerMaxTimeInSeconds = 7;
 
     public TlharghWindow() {
         InitializeComponent();
@@ -27,16 +30,23 @@ public partial class TlharghWindow : IDisposable {
     }
 
     public void Dispose() {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    public void Dispose(bool disposing) {
+        if (!disposing) { return;}
+
+        _DispatcherTimer?.Stop();
+
         foreach (FileSystemWatcher watcher in _FileSystemWatchers) {
             watcher.Dispose();
         }
 
-        if (_ChangedArborFoldersRepository != null) {
-            _ChangedArborFoldersRepository.OnChangedFolderAdded -= OnChangedFolderAdded;
-            _ChangedArborFoldersRepository.OnChangedFolderRemoved -= OnChangedFolderRemoved;
-        }
+        if (_ChangedArborFoldersRepository == null) { return; }
 
-        _DispatcherTimer?.Stop();
+        _ChangedArborFoldersRepository.OnChangedFolderAdded -= OnChangedFolderAdded;
+        _ChangedArborFoldersRepository.OnChangedFolderRemoved -= OnChangedFolderRemoved;
     }
 
     private void OnCloseButtonClickAsync(object sender, RoutedEventArgs e) {
@@ -75,12 +85,15 @@ public partial class TlharghWindow : IDisposable {
     private void CreateAndStartTimer() {
         _DispatcherTimer = new DispatcherTimer();
         _DispatcherTimer.Tick += TlharghWindow_Tick;
-        _DispatcherTimer.Interval = TimeSpan.FromSeconds(7);
+        _DispatcherTimer.Interval = TimeSpan.FromSeconds(_timerIntervalInSeconds);
         _DispatcherTimer.Start();
     }
 
     private void TlharghWindow_Tick(object? sender, EventArgs e) {
         UiSynchronizationContext!.Send(_ => UpdateUiThreadLastActiveAt(), null);
+
+        ITlharghWorker worker = _Container.Resolve<ITlharghWorkerFactory>().Create();
+        worker.DoWork(++ _Counter, DateTime.Now.AddSeconds(_workerMaxTimeInSeconds));
     }
 
     private void UpdateUiThreadLastActiveAt() {
@@ -98,6 +111,6 @@ public partial class TlharghWindow : IDisposable {
 
     private void UpdateMonitorWithChangedFolder(ChangedFolder changedFolder, bool removed) {
         MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n")
-            + (removed ? "✅" : "⭕") + ' ' + changedFolder;
+            + (removed ? "✅" : "❎") + ' ' + changedFolder;
     }
 }

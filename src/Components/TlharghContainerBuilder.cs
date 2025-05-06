@@ -12,6 +12,7 @@ public static class TlharghContainerBuilder {
         builder.RegisterType<ChangedArborFoldersRepository>().As<IChangedArborFoldersRepository>().SingleInstance();
         builder.RegisterType<TlharghSettingsSource>().As<ITlharghSettingsSource>().SingleInstance();
         builder.RegisterType<TlharghAccessor>().As<ITlharghAccessor>().SingleInstance();
+        builder.RegisterType<TlharghWorkerFactory>().As<ITlharghWorkerFactory>().SingleInstance();
 
         return builder;
     }
