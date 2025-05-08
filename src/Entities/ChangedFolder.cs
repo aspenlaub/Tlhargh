@@ -22,8 +22,8 @@ public class ChangedFolder {
 
     private static string EncloseWithSlashes(string s) {
         return s == ""
-            ? (s.StartsWith('/') ? "" : "/") + s + (s.EndsWith('/') ? "" : "/")
-            : "/";
+            ? "/"
+            : (s.StartsWith('/') ? "" : "/") + s + (s.EndsWith('/') ? "" : "/");
     }
 
 }
