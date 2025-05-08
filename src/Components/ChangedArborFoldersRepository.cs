@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text.Json;
+using Accessibility;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
@@ -22,8 +23,16 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
         _IncludeTemp = true;
     }
 
+    private readonly List<string> _InfixesToExclude = [@"\temp\", @"\files\"];
+
+    private bool ShouldBeExcluded(IFolder folder) {
+        return !_IncludeTemp
+               && _InfixesToExclude.Any(infix
+                => (folder.FullName + "\\").Contains(infix, StringComparison.InvariantCultureIgnoreCase));
+    }
+
     public void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
-        if (!_IncludeTemp && folder.FullName.Contains(@"\temp\", StringComparison.InvariantCultureIgnoreCase)) { return; }
+        if (ShouldBeExcluded(folder)) { return; }
 
         if (ChangedFolders.Any(f => f.Folder.FullName == folder.FullName)) { return; }
 
