@@ -12,12 +12,19 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
     private IList<ChangedFolder> ChangedFolders { get; } = [];
 
     private IFolder _WorkingFolder = new Folder(Path.GetTempPath()).SubFolder("Default" + nameof(ChangedArborFoldersRepository));
+    private bool _IncludeTemp;
 
     public void SetWorkingFolder(IFolder workingFolder) {
         _WorkingFolder = workingFolder;
     }
 
+    public void IncludeTemp() {
+        _IncludeTemp = true;
+    }
+
     public void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder) {
+        if (!_IncludeTemp && folder.FullName.Contains(@"\temp\", StringComparison.InvariantCultureIgnoreCase)) { return; }
+
         if (ChangedFolders.Any(f => f.Folder.FullName == folder.FullName)) { return; }
 
         var changedFolder = new ChangedFolder { ArborFolder = arborFolder, Folder = folder };

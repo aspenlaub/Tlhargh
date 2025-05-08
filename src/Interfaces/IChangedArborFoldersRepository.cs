@@ -6,6 +6,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 
 public interface IChangedArborFoldersRepository {
     void SetWorkingFolder(IFolder workingFolder);
+    void IncludeTemp();
 
     void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder);
     void UnregisterChangeInFolder(ChangedFolder folderToUnregister);

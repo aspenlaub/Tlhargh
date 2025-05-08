@@ -32,6 +32,7 @@ public class ArborFolderWatcherTest {
 
         _ChangedArborFoldersRepository = new ChangedArborFoldersRepository();
         _ChangedArborFoldersRepository.SetWorkingFolder(_WorkingFolder);
+        _ChangedArborFoldersRepository.IncludeTemp();
         _ArborFolder = new ArborFolder { FullFolder = _Folder.FullName + '\\' };
         _Watcher = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, _ArborFolder).Create();
     }

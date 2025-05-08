@@ -11,6 +11,9 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
     public void SetWorkingFolder(IFolder workingFolder) {
     }
 
+    public void IncludeTemp() {
+    }
+
     public void Reset() {
         ChangedFolders = [];
     }
