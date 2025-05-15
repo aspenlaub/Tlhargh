@@ -17,7 +17,7 @@ public class ChangedFolder {
     }
 
     public override string ToString() {
-        return ArborFolder.ArborDestPathVar + ArborSubFolder.Substring(1);
+        return ArborFolder.ArborDestPath + ArborSubFolder.Substring(1);
     }
 
     private static string EncloseWithSlashes(string s) {

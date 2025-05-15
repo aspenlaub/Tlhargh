@@ -21,7 +21,7 @@ public class TlharghAccessorTest {
         var errorsAndInfos = new ErrorsAndInfos();
         ArborFolders folders = await foldersSource.GetResolvedArborFoldersAsync(errorsAndInfos);
         Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
-        _ArborFolder = folders.Single(f => f.ArborDestPathVar == "/arboretum/test/");
+        _ArborFolder = folders.Single(f => f.ArborDestPath == "/arboretum/test/");
         IFolder folder = new Folder(_ArborFolder.FullFolder).SubFolder(nameof(TlharghAccessorTest));
         folder.CreateIfNecessary();
         _ChangedFolder = new ChangedFolder { ArborFolder = _ArborFolder, Folder = (Folder)folder };

@@ -6,7 +6,7 @@ public class SecretArborFolders : ISecret<ArborFolders> {
     private ArborFolders? _LogicalFolders;
     public ArborFolders DefaultValue => _LogicalFolders ??= [new() {
         ArborSourcePathVar = "arSoPaVa",
-        ArborDestPathVar = "arDePaVa",
+        ArborDestPath = "arDePaVa",
         FullFolder = @"c:\temp\"
     }];
 

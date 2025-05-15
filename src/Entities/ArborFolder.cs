@@ -6,8 +6,8 @@ public class ArborFolder {
     [XmlAttribute("arborsourcepathvar")]
     public string ArborSourcePathVar { get; set; } = "";
 
-    [XmlAttribute("arbordestpathvar")]
-    public string ArborDestPathVar { get; set; } = "";
+    [XmlAttribute("arbordestpath")]
+    public string ArborDestPath { get; set; } = "";
 
     [XmlAttribute("fullfolder")]
     public string FullFolder { get; set; } = "";

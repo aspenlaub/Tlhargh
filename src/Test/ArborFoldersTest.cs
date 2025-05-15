@@ -55,9 +55,9 @@ public class ArborFoldersTest {
         Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
         foreach (string arborSourcePathVar in expectedArborFolders.Keys) {
             Assert.IsTrue(actualArborFolders.ContainsKey(arborSourcePathVar), $"Missing ArborSourcePathVar '{arborSourcePathVar}'");
-            Assert.AreEqual(expectedArborFolders[arborSourcePathVar].ArborDestPathVar,
-                actualArborFolders[arborSourcePathVar].ArborDestPathVar,
-                $"ArborDestPathVar for '{arborSourcePathVar}' should be {expectedArborFolders[arborSourcePathVar].ArborDestPathVar}");
+            Assert.AreEqual(expectedArborFolders[arborSourcePathVar].ArborDestPath,
+                actualArborFolders[arborSourcePathVar].ArborDestPath,
+                $"ArborDestPathVar for '{arborSourcePathVar}' should be {expectedArborFolders[arborSourcePathVar].ArborDestPath}");
             Assert.AreEqual(expectedArborFolders[arborSourcePathVar].FullFolder,
                 actualArborFolders[arborSourcePathVar].FullFolder,
                 $"FullName for '{arborSourcePathVar}' should be {expectedArborFolders[arborSourcePathVar].FullFolder}");
