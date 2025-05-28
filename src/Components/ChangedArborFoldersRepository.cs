@@ -22,7 +22,20 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
         _IncludeTemp = true;
     }
 
-    private readonly List<string> _InfixesToExclude = [@"\temp\", @"\files\"];
+    private readonly List<string> _InfixesToExclude = [
+        @"\temp\",
+        @"\files\",
+        @"\.vs",
+        @"\obj\",
+        @"\Debug\",
+        @"\Release\",
+        @"Bin\",
+        @"\bin\",
+        @"TestResults\",
+        @"Archiv\",
+        @"\CSharp\Common\",
+        @"\packages\"
+    ];
 
     private bool ShouldBeExcluded(IFolder folder) {
         return !_IncludeTemp
