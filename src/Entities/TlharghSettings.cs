@@ -10,10 +10,14 @@ public class TlharghSettings : ISecretResult<TlharghSettings> {
     [XmlAttribute("tlharghbackendurl")]
     public string TlharghBackendUrl { get; set; } = "";
 
+    [XmlAttribute("tlharghsecondarybackendurl")]
+    public string TlharghSecondaryBackendUrl { get; set; } = "";
+
     public TlharghSettings Clone() {
         return new TlharghSettings {
             GetArborFoldersUrl = GetArborFoldersUrl,
-            TlharghBackendUrl = TlharghBackendUrl
+            TlharghBackendUrl = TlharghBackendUrl,
+            TlharghSecondaryBackendUrl = TlharghSecondaryBackendUrl
         };
     }
 }
