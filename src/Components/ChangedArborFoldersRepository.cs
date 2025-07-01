@@ -24,13 +24,17 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
 
     private readonly List<string> _InfixesToExclude = [
         @"\temp\",
+        @"\Temp\",
         @"\files\",
         @"\.vs",
         @"\obj\",
+        @"\Obj\",
+        @"\debug\",
         @"\Debug\",
+        @"\release\",
         @"\Release\",
-        @"Bin\",
         @"\bin\",
+        @"Bin\",
         @"TestResults\",
         @"Archiv\",
         @"\CSharp\Common\",
@@ -40,7 +44,7 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
     private bool ShouldBeExcluded(IFolder folder) {
         return !_IncludeTemp
                && _InfixesToExclude.Any(infix
-                => (folder.FullName + "\\").Contains(infix, StringComparison.InvariantCultureIgnoreCase));
+                => (folder.FullName + "\\").Contains(infix, StringComparison.InvariantCulture));
     }
 
     public void RegisterChangeInFolder(ArborFolder arborFolder, Folder folder) {

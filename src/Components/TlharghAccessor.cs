@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
-using System.Net.WebSockets;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
@@ -41,7 +40,7 @@ public class TlharghAccessor(ITlharghSettingsSource tlharghSettingsSource) : ITl
                 errorsAndInfos.Errors.Add($"Error reading result from {tlharghBackendUrl}");
             } else if (!processorResult.Accepted) {
                 errorsAndInfos.Errors.Add($"Request not accepted by {tlharghBackendUrl}");
-            } else if (!processorResult.Success) {
+            } else if (tlharghBackendUrl == tlharghSettings.TlharghBackendUrl && !processorResult.Success) {
                 errorsAndInfos.Errors.Add($"Request could not be processed by {tlharghBackendUrl}");
             }
         }

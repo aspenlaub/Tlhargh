@@ -11,4 +11,8 @@ public class ArborFolder {
 
     [XmlAttribute("fullfolder")]
     public string FullFolder { get; set; } = "";
+
+    public override string ToString() {
+        return FullFolder;
+    }
 }
