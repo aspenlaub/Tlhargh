@@ -74,7 +74,7 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
 
         changedFolder = FoldersWithChanges().FirstOrDefault(f => f.EqualTo(folderToUnregister));
         if (changedFolder != null) {
-            throw new Exception("Changed folder survived removal");
+            FolderSurvived();
         }
     }
 
@@ -141,5 +141,11 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
 
     protected virtual void ChangedFolderRemoved(ChangedFolder changedFolder) {
         OnChangedFolderRemoved?.Invoke(this, changedFolder);
+    }
+
+    public event EventHandler? OnFolderSurvived;
+
+    protected virtual void FolderSurvived() {
+        OnFolderSurvived?.Invoke(this, EventArgs.Empty);
     }
 }

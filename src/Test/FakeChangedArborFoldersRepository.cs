@@ -47,4 +47,6 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
     protected virtual void ChangedFolderRemoved(ChangedFolder changedFolder) {
         OnChangedFolderRemoved?.Invoke(this, changedFolder);
     }
+
+    public event EventHandler? OnFolderSurvived;
 }

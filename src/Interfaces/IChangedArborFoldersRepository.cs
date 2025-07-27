@@ -14,4 +14,5 @@ public interface IChangedArborFoldersRepository {
 
     event EventHandler<ChangedFolder>? OnChangedFolderAdded;
     event EventHandler<ChangedFolder>? OnChangedFolderRemoved;
+    event EventHandler? OnFolderSurvived;
 }

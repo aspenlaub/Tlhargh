@@ -76,6 +76,7 @@ public partial class TlharghWindow : IDisposable {
         _ChangedArborFoldersRepository.SetWorkingFolder(workingFolder);
         _ChangedArborFoldersRepository.OnChangedFolderAdded += OnChangedFolderAdded;
         _ChangedArborFoldersRepository.OnChangedFolderRemoved += OnChangedFolderRemoved;
+        _ChangedArborFoldersRepository.OnFolderSurvived += OnFolderSurvived;
 
         foreach (ArborFolder arborFolder in arborFolders) {
             var factory = new ArborFolderWatcherFactory(_ChangedArborFoldersRepository, arborFolder);
@@ -117,6 +118,10 @@ public partial class TlharghWindow : IDisposable {
         UiSynchronizationContext!.Send(_ => UpdateMonitorWithChangedFolder(changedFolder, true), null);
     }
 
+    private void OnFolderSurvived(object? sender, EventArgs e) {
+        UiSynchronizationContext!.Send(_ => UpdateMonitorWithInconvenience(Properties.Resources.FolderSurvivedRemovalAfterProcessing), null);
+    }
+
     private void UpdateMonitorWithChangedFolder(ChangedFolder changedFolder, bool removed) {
         MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n")
             + (removed ? "✅" : "❎") + ' ' + changedFolder;
@@ -125,5 +130,10 @@ public partial class TlharghWindow : IDisposable {
     private void UpdateMonitorWithException(Exception exception) {
         MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n")
             + "❎ Exception: " + exception.Message;
+    }
+
+    private void UpdateMonitorWithInconvenience(string inconvenience) {
+        MonitorBox.Text = MonitorBox.Text + (string.IsNullOrWhiteSpace(MonitorBox.Text) ? "" : "\r\n")
+            + "❎ OOPS: " + inconvenience;
     }
 }

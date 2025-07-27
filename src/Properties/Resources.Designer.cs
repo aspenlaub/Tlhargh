@@ -77,5 +77,14 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Properties {
                 return ResourceManager.GetString("CouldNotRetrieveArborFolders", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder survived removal after processing.
+        /// </summary>
+        internal static string FolderSurvivedRemovalAfterProcessing {
+            get {
+                return ResourceManager.GetString("FolderSurvivedRemovalAfterProcessing", resourceCulture);
+            }
+        }
     }
 }
