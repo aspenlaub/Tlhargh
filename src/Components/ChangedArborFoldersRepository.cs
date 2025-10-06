@@ -87,7 +87,7 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
 
     private void PersistToFile(ChangedFolder changedFolder, bool removed) {
         while (!TryPersistToFile(changedFolder, removed)) {
-            Thread.Sleep(TimeSpan.FromMilliseconds(500));
+            Thread.Sleep(TimeSpan.FromMilliseconds(2500));
         }
     }
 
@@ -104,7 +104,13 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
             if (changedFolderInFile != null) { return true; }
             changedFolders.Add(changedFolder);
         }
-        File.WriteAllText(fileName, JsonSerializer.Serialize(changedFolders));
+
+        try {
+            File.WriteAllText(fileName, JsonSerializer.Serialize(changedFolders));
+        } catch {
+            return false;
+        }
+
         List<ChangedFolder> changedFoldersCheck = ReadFile();
         if (changedFolders.All(f => changedFoldersCheck.Any(fc => fc.EqualTo(f)))) {
             return true;
