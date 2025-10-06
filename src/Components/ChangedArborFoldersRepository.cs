@@ -38,7 +38,8 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
         @"TestResults\",
         @"Archiv\",
         @"\CSharp\Common\",
-        @"\packages\"
+        @"\packages\",
+        @"\fakedatabases\"
     ];
 
     private bool ShouldBeExcluded(IFolder folder) {
