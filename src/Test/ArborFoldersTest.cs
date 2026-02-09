@@ -7,7 +7,6 @@ using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Test;
 
@@ -17,7 +16,7 @@ public class ArborFoldersTest {
 
     [TestInitialize]
     public void Initialize() {
-        _PeghContainer = new ContainerBuilder().UsePegh(nameof(ArborFoldersTest), new DummyCsArgumentPrompter()).Build();
+        _PeghContainer = new ContainerBuilder().UsePegh(nameof(ArborFoldersTest)).Build();
         _Container = new ContainerBuilder().UseTlharghDvinAndPegh().Build();
     }
 

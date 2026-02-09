@@ -7,7 +7,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 public static class TlharghContainerBuilder {
     // ReSharper disable once UnusedMember.Global
     public static ContainerBuilder UseTlharghDvinAndPegh(this ContainerBuilder builder) {
-        builder.UsePegh(Constants.TlharghAppId, new DummyCsArgumentPrompter());
+        builder.UsePegh(Constants.TlharghAppId);
         builder.RegisterType<ArborFoldersSource>().As<IArborFoldersSource>().SingleInstance();
         builder.RegisterType<ChangedArborFoldersRepository>().As<IChangedArborFoldersRepository>().SingleInstance();
         builder.RegisterType<TlharghSettingsSource>().As<ITlharghSettingsSource>().SingleInstance();
