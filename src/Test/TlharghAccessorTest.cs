@@ -3,7 +3,6 @@ using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
 using Aspenlaub.Net.GitHub.CSharp.Seoa.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
-using Aspenlaub.Net.GitHub.CSharp.Skladasu.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
@@ -52,7 +51,6 @@ public class TlharghAccessorTest {
         };
         var errorsAndInfos = new ErrorsAndInfos();
         await sut.ProcessChangedFolderAsync(changedFolder, errorsAndInfos);
-        Assert.IsTrue(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
         Assert.IsTrue(errorsAndInfos.Errors.Any(e => e.StartsWith("Request could not be processed by")));
     }
 }
