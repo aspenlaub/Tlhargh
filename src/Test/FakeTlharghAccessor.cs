@@ -1,4 +1,4 @@
-﻿using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
+﻿using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 

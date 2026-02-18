@@ -1,11 +1,13 @@
 ﻿using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Seoa.Extensions;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Test;
 
@@ -20,7 +22,7 @@ public class TlharghAccessorTest {
         IArborFoldersSource foldersSource = _Container.Resolve<IArborFoldersSource>();
         var errorsAndInfos = new ErrorsAndInfos();
         ArborFolders folders = await foldersSource.GetResolvedArborFoldersAsync(errorsAndInfos);
-        Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
+        Assert.That.ThereWereNoErrors(errorsAndInfos);
         _ArborFolder = folders.Single(f => f.ArborDestPath == "/arboretum/test/");
         IFolder folder = new Folder(_ArborFolder.FullFolder).SubFolder(nameof(TlharghAccessorTest));
         folder.CreateIfNecessary();
@@ -35,7 +37,7 @@ public class TlharghAccessorTest {
         }
         var errorsAndInfos = new ErrorsAndInfos();
         await sut.ProcessChangedFolderAsync(_ChangedFolder, errorsAndInfos);
-        Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
+        Assert.That.ThereWereNoErrors(errorsAndInfos);
     }
 
     [TestMethod]

@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Json;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Components;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
-using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Seoa.Extensions;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Components;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
@@ -25,7 +25,7 @@ public class ArborFoldersTest {
         var secret = new SecretArborFolders();
         var errorsAndInfos = new ErrorsAndInfos();
         ArborFolders arborFolders = await _PeghContainer!.Resolve<ISecretRepository>().GetAsync(secret, errorsAndInfos);
-        Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
+        Assert.That.ThereWereNoErrors(errorsAndInfos);
         Assert.IsTrue(arborFolders.Count > 0);
     }
 
@@ -34,7 +34,7 @@ public class ArborFoldersTest {
         var secret = new SecretTlharghSettings();
         var errorsAndInfos = new ErrorsAndInfos();
         TlharghSettings settings = await _PeghContainer!.Resolve<ISecretRepository>().GetAsync(secret, errorsAndInfos);
-        Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
+        Assert.That.ThereWereNoErrors(errorsAndInfos);
         Assert.IsTrue(!string.IsNullOrEmpty(settings.GetArborFoldersUrl));
     }
 
@@ -43,7 +43,7 @@ public class ArborFoldersTest {
         var secret = new SecretTlharghSettings();
         var errorsAndInfos = new ErrorsAndInfos();
         TlharghSettings settings = await _PeghContainer!.Resolve<ISecretRepository>().GetAsync(secret, errorsAndInfos);
-        Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
+        Assert.That.ThereWereNoErrors(errorsAndInfos);
         var client = new HttpClient();
         Dictionary<string, ArborFolder> expectedArborFolders = (await client.GetFromJsonAsync<List<ArborFolder>>(settings.GetArborFoldersUrl))?
                .ToDictionary(x => x.ArborSourcePathVar, x => x)
@@ -51,7 +51,7 @@ public class ArborFoldersTest {
         ArborFolders arborFolders = await _Container!.Resolve<IArborFoldersSource>().GetResolvedArborFoldersAsync(errorsAndInfos);
         var actualArborFolders = arborFolders
              .ToDictionary(x => x.ArborSourcePathVar, x => x);
-        Assert.IsFalse(errorsAndInfos.AnyErrors(), errorsAndInfos.ErrorsToString());
+        Assert.That.ThereWereNoErrors(errorsAndInfos);
         foreach (string arborSourcePathVar in expectedArborFolders.Keys) {
             Assert.IsTrue(actualArborFolders.ContainsKey(arborSourcePathVar), $"Missing ArborSourcePathVar '{arborSourcePathVar}'");
             Assert.AreEqual(expectedArborFolders[arborSourcePathVar].ArborDestPath,
