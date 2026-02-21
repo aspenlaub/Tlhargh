@@ -50,7 +50,8 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
 
     public event EventHandler? OnFolderSurvived;
 
-    protected virtual void FolderSurvived(ChangedFolder changedFolder) {
-        OnFolderSurvived?.Invoke(this, changedFolder);
+    // ReSharper disable once UnusedMember.Global
+    protected virtual void FolderSurvived(object? sender, EventArgs e) {
+        OnFolderSurvived?.Invoke(sender, e);
     }
 }
