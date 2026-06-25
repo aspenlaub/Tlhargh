@@ -5,7 +5,7 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <RestoreEnablePackagePruning>false</RestoreEnablePackagePruning>
     <AssetTargetFallback>net10.0</AssetTargetFallback>
-<Nullable>enable</Nullable>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <GenerateBuildInfoConfigFile>false</GenerateBuildInfoConfigFile>
@@ -23,6 +23,7 @@
     <AssemblyName>Aspenlaub.Net.GitHub.CSharp.Tlhargh</AssemblyName>
     <RootNamespace>Aspenlaub.Net.GitHub.CSharp.Tlhargh</RootNamespace>
     <ApplicationIcon>tlhargh.ico</ApplicationIcon>
+    <MSBuildEnableWorkloadResolver>false</MSBuildEnableWorkloadResolver>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
