@@ -21,11 +21,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'" />
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="10.0.12" />
-    <PackageReference Include="MSTest.Analyzers" Version="4.4.0">
+    <PackageReference Include="MSTest.Analyzers" Version="4.4.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Seoa" Version="2.0.2607.982" />
+    <PackageReference Include="Seoa" Version="2.0.2620.841" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tlhargh.csproj" />
