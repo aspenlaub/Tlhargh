@@ -120,10 +120,19 @@
   <data name="CouldNotDetermineWorkingFolder" xml:space="preserve">
     <value>Could not determine working folder</value>
   </data>
+  <data name="CouldNotResetRepositoryFile" xml:space="preserve">
+    <value>Could not reset repository file "{0}"</value>
+  </data>
   <data name="CouldNotRetrieveArborFolders" xml:space="preserve">
     <value>Could not retrieve arbor folders</value>
   </data>
+  <data name="ExceptionWhenReadingRepositoryFile" xml:space="preserve">
+    <value>An exception was thrown while trying to read repository file "{0}" ("{1}")</value>
+  </data>
   <data name="FolderSurvivedRemovalAfterProcessing" xml:space="preserve">
     <value>Folder survived removal after processing</value>
+  </data>
+  <data name="StartupSanityCheckFailedOnWorkingFolder" xml:space="preserve">
+    <value>Startup sanity check failed on working folder</value>
   </data>
 </root>

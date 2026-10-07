@@ -74,6 +74,12 @@ public partial class TlharghWindow : IDisposable {
         }
 
         _ChangedArborFoldersRepository = _Container.Resolve<IChangedArborFoldersRepository>();
+        errorsAndInfos = new ErrorsAndInfos();
+        _ChangedArborFoldersRepository.StartupSanityCheck(errorsAndInfos);
+        if (errorsAndInfos.AnyErrors()) {
+            MessageBox.Show(string.Join("\r\n", errorsAndInfos.Errors), Properties.Resources.StartupSanityCheckFailedOnWorkingFolder, MessageBoxButton.OK, MessageBoxImage.Error);
+            Close();
+        }
         _ChangedArborFoldersRepository.SetWorkingFolder(workingFolder);
         _ChangedArborFoldersRepository.OnChangedFolderAdded += OnChangedFolderAdded;
         _ChangedArborFoldersRepository.OnChangedFolderRemoved += OnChangedFolderRemoved;

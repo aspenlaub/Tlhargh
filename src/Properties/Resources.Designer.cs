@@ -19,7 +19,7 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -70,6 +70,15 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not reset repository file &quot;{0}&quot;.
+        /// </summary>
+        internal static string CouldNotResetRepositoryFile {
+            get {
+                return ResourceManager.GetString("CouldNotResetRepositoryFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not retrieve arbor folders.
         /// </summary>
         internal static string CouldNotRetrieveArborFolders {
@@ -79,11 +88,29 @@ namespace Aspenlaub.Net.GitHub.CSharp.Tlhargh.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An exception was thrown while trying to read repository file &quot;{0}&quot; (&quot;{1}&quot;).
+        /// </summary>
+        internal static string ExceptionWhenReadingRepositoryFile {
+            get {
+                return ResourceManager.GetString("ExceptionWhenReadingRepositoryFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Folder survived removal after processing.
         /// </summary>
         internal static string FolderSurvivedRemovalAfterProcessing {
             get {
                 return ResourceManager.GetString("FolderSurvivedRemovalAfterProcessing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Startup sanity check failed on working folder.
+        /// </summary>
+        internal static string StartupSanityCheckFailedOnWorkingFolder {
+            get {
+                return ResourceManager.GetString("StartupSanityCheckFailedOnWorkingFolder", resourceCulture);
             }
         }
     }

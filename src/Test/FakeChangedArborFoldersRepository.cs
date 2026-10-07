@@ -1,5 +1,6 @@
 ﻿using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 
@@ -34,6 +35,9 @@ public class FakeChangedArborFoldersRepository : IChangedArborFoldersRepository 
 
     public IList<ChangedFolder> FoldersWithChanges() {
         return ChangedFolders;
+    }
+
+    public void StartupSanityCheck(ErrorsAndInfos errorsAndInfos) {
     }
 
     public event EventHandler<ChangedFolder>? OnChangedFolderAdded;

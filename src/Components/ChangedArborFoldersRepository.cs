@@ -3,6 +3,7 @@ using System.Text.Json;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Extensions;
 using Aspenlaub.Net.GitHub.CSharp.Pegh.Interfaces;
+using Aspenlaub.Net.GitHub.CSharp.Skladasu.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Entities;
 using Aspenlaub.Net.GitHub.CSharp.Tlhargh.Interfaces;
 
@@ -84,6 +85,39 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
             PersistToFile(changedFolder, false);
         }
         return ReadFile();
+    }
+
+    public void StartupSanityCheck(ErrorsAndInfos errorsAndInfos) {
+        string fileName = FileName();
+        if (!File.Exists(fileName)) {
+            return;
+        }
+
+        var e = new Exception();
+        for (int attempts = 5; attempts > 0; attempts--) {
+            try {
+                ReadFile();
+                return;
+            } catch (JsonException je) {
+                e = je;
+            } catch (Exception oe) {
+                e = oe;
+            }
+
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+        }
+
+        if (!(e is JsonException)) {
+            errorsAndInfos.Errors.Add(string.Format(Properties.Resources.ExceptionWhenReadingRepositoryFile, fileName, e.Message));
+            return;
+        }
+
+        try {
+            File.Delete(fileName);
+        } catch {
+            errorsAndInfos.Errors.Add(string.Format(Properties.Resources.CouldNotResetRepositoryFile, fileName));
+            return;
+        }
     }
 
     private void PersistToFile(ChangedFolder changedFolder, bool removed) {
