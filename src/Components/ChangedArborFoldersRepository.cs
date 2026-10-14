@@ -81,7 +81,8 @@ public class ChangedArborFoldersRepository : IChangedArborFoldersRepository {
     }
 
     public IList<ChangedFolder> FoldersWithChanges() {
-        foreach (ChangedFolder changedFolder in ChangedFolders) {
+        IList<ChangedFolder> changedFoldersCopy = new List<ChangedFolder>(ChangedFolders);
+        foreach (ChangedFolder changedFolder in changedFoldersCopy) {
             PersistToFile(changedFolder, false);
         }
         return ReadFile();
