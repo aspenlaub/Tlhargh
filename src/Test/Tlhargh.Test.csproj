@@ -20,11 +20,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'" />
   <ItemGroup>
-    <PackageReference Include="MSTest.Analyzers" Version="4.5.2">
+    <PackageReference Include="MSTest.Analyzers" Version="4.5.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Seoa" Version="2.0.2666.1373" />
+    <PackageReference Include="Seoa" Version="2.0.2667.1288" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tlhargh.csproj" />
