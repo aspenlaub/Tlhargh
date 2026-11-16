@@ -4,7 +4,6 @@
     <TargetFramework>net11.0-windows</TargetFramework>
     <RestoreEnablePackagePruning>false</RestoreEnablePackagePruning>
     <AssetTargetFallback>net11.0</AssetTargetFallback>
-    <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseVSTest>true</UseVSTest>
